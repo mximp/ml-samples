@@ -1,32 +1,34 @@
 import torch
 import matplotlib.pyplot as plt
 
-X = torch.arange(-5, 5, 0.1).view(-1, 1)
-func = -5 * X
-Y = func + 0.4 * torch.randn(X.size())
+data = torch.arange(-5, 5, 0.1).view(-1, 1)
+
+func = -5 * data
+
+y = func + 0.4 * torch.randn(data.size())
 
 
 # defining the function for forward pass for prediction
-def forward(x):
+def model_func(x):
     return w * x
 
 
 # evaluating data points with Mean Square Error
-def criterion(y_pred, y):
-    return torch.mean((y_pred - y) ** 2)
+def err_func(y_pred, y_act):
+    return torch.mean((y_pred - y_act) ** 2)
 
 
 w = torch.tensor(-10.0, requires_grad=True)
 
 step_size = 0.1
 loss_list = []
-cycles = 20
+iterations = 20
 
-for i in range(cycles):
+for i in range(iterations):
     # making predictions with forward pass
-    Y_pred = forward(X)
+    Y_pred = model_func(data)
     # calculating the loss between original and predicted data points
-    loss = criterion(Y_pred, Y)
+    loss = err_func(Y_pred, y)
     # storing the calculated loss in a list
     loss_list.append(loss.item())
     # backward pass for computing the gradients of the loss w.r.t to
